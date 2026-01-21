@@ -1,0 +1,43 @@
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# 1. Target variable distribution
+plt.figure(figsize=(6,4))
+sns.countplot(x='Claim', data=df)
+plt.title("Distribution of Claims")
+plt.show()
+
+# 2. Numeric feature summary
+df.describe().T
+
+# 3. Correlation with target
+numeric_cols = df.select_dtypes(include=['int64','float64']).columns
+corr_matrix = df[numeric_cols].corr()
+target_corr = corr_matrix['Claim'].sort_values(ascending=False)
+target_corr
+
+# 4. Bar plot of correlations for top features
+features = [
+    "Building Dimension",
+    "Building_Type",
+    "NumberOfWindows",
+    "Insured_Period",
+    "Residential",
+    "Building_Fenced",
+    "Building_Painted",
+    "Settlement",
+    "Garden"
+]
+
+plt.figure(figsize=(8,6))
+sns.barplot(x=target_corr[features], y=features)
+plt.title("Correlation of Top Features with Claim")
+plt.show()
+
+# 5. Categorical features vs Claim
+categorical_cols = ["Building_Painted", "Building_Fenced", "Garden", "Settlement", "Building_Type", "NumberOfWindows"]
+for col in categorical_cols:
+    plt.figure(figsize=(6,4))
+    sns.countplot(x=col, hue='Claim', data=df)
+    plt.title(f"{col} vs Claim")
+    plt.show()
