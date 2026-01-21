@@ -1,0 +1,25 @@
+# Map categorical columns to numeric
+df['Building_Painted'] = df['Building_Painted'].map({'N': 1, 'V': 0})
+df['Building_Fenced'] = df['Building_Fenced'].map({'N': 1, 'V': 0})
+df['Garden'] = df['Garden'].map({'V': 1, 'O': 0})
+df['Settlement'] = df['Settlement'].map({'U': 1, 'R': 0})
+
+# Fill numeric missing values with median
+numeric_cols = df.select_dtypes(include=['float64', 'int64']).columns
+for col in numeric_cols:
+    df[col].fillna(df[col].median(), inplace=True)
+
+# Remove duplicates
+df.drop_duplicates(inplace=True)
+
+# Clean Geo_Code
+df["Geo_Code"] = df["Geo_Code"].astype(str).str.replace(r"[A-Za-z]", "", regex=True)
+df["Geo_Code"] = pd.to_numeric(df["Geo_Code"], errors="coerce")
+df["Geo_Code"].fillna(df["Geo_Code"].median(), inplace=True)
+
+# Map NumberOfWindows if needed (already numeric)
+df["NumberOfWindows"] = pd.to_numeric(df["NumberOfWindows"], errors='coerce')
+df["NumberOfWindows"].fillna(df["NumberOfWindows"].median(), inplace=True)
+
+# Verify cleaned dataset
+df.info()
