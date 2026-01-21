@@ -1,0 +1,17 @@
+# Insurance Claim Prediction
+
+**Project Goal:**  
+Predict the probability of a building having at least one insurance claim over its insured period using building characteristics.
+
+**Data:**  
+- `Train_data.csv` in `data/` folder
+- Target variable: `Claim` (0 = no claim, 1 = at least one claim)
+
+**Notebook Structure:**  
+1. Data Loading  
+2. Data Cleaning & Preprocessing  
+3. Exploratory Data Analysis (EDA)  
+4. Feature Selection  
+5. Model Building (Logistic Regression, Random Forest, XGBoost)  
+6. Model Evaluation  
+7. Insights & Recommendations
