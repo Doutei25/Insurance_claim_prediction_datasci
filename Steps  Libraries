@@ -1,0 +1,17 @@
+insurance-claim-prediction/
+│
+├── data/
+│   └── Train_data.csv
+├── notebooks/
+│   └── 01_insurance_claim_prediction.ipynb
+├── README.md
+└── requirements.txt
+
+
+
+pandas
+numpy
+matplotlib
+seaborn
+scikit-learn
+xgboost
