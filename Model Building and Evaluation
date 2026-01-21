@@ -1,0 +1,66 @@
+LOGISTICE REGRESSION
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import classification_report, roc_auc_score
+
+# Scale features
+scaler = StandardScaler()
+X_train_scaled = scaler.fit_transform(X_train)
+X_test_scaled = scaler.transform(X_test)
+
+# Train model
+logreg = LogisticRegression(random_state=42)
+logreg.fit(X_train_scaled, y_train)
+
+# Predict & evaluate
+y_pred_lr = logreg.predict(X_test_scaled)
+y_proba_lr = logreg.predict_proba(X_test_scaled)[:,1]
+
+print("Logistic Regression Report")
+print(classification_report(y_test, y_pred_lr))
+print("ROC-AUC:", roc_auc_score(y_test, y_proba_lr))
+RANDOM FOREST
+from sklearn.ensemble import RandomForestClassifier
+
+rf = RandomForestClassifier(n_estimators=100, random_state=42)
+rf.fit(X_train, y_train)
+
+y_pred_rf = rf.predict(X_test)
+y_proba_rf = rf.predict_proba(X_test)[:,1]
+
+print("Random Forest Report")
+print(classification_report(y_test, y_pred_rf))
+print("ROC-AUC:", roc_auc_score(y_test, y_proba_rf))
+
+# Feature importance
+import pandas as pd
+feat_importances = pd.Series(rf.feature_importances_, index=features)
+feat_importances.sort_values(ascending=True).plot(kind='barh', figsize=(8,6))
+plt.title("Random Forest Feature Importance")
+plt.show()
+XGBOOST
+from xgboost import XGBClassifier
+
+xgb = XGBClassifier(n_estimators=100, learning_rate=0.1, random_state=42, eval_metric='logloss')
+xgb.fit(X_train, y_train)
+
+y_pred_xgb = xgb.predict(X_test)
+y_proba_xgb = xgb.predict_proba(X_test)[:,1]
+
+print("XGBoost Report")
+print(classification_report(y_test, y_pred_xgb))
+print("ROC-AUC:", roc_auc_score(y_test, y_proba_xgb))
+
+MODEL COMPARISM
+
+models = ['Logistic Regression', 'Random Forest', 'XGBoost']
+roc_scores = [
+    roc_auc_score(y_test, y_proba_lr),
+    roc_auc_score(y_test, y_proba_rf),
+    roc_auc_score(y_test, y_proba_xgb)
+]
+
+for m, r in zip(models, roc_scores):
+    print(f"{m} ROC-AUC: {r:.4f}")
+
+
